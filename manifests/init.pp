@@ -143,6 +143,7 @@ class solr(
 	exec{"cp -a ${solr::params::base_dir}/current/example/solr/collection1 ${solr_home}/ && chown -R ${solr::params::user} ${solr_home}/collection1": 
 		provider => shell,
 		before => Service[solr],
+		require => Exec["extract solr $version"],
 		creates => "${solr_home}/collection1/core.properties"
 	}
 
