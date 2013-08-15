@@ -1,0 +1,11 @@
+FORGE
+  remote: http://forge.puppetlabs.com
+  specs:
+    puppetlabs/java (1.0.1)
+      puppetlabs/stdlib (>= 0.1.6)
+    puppetlabs/stdlib (4.1.0)
+
+DEPENDENCIES
+  puppetlabs/java (>= 0)
+  puppetlabs/stdlib (>= 0)
+

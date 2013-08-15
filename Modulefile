@@ -1,0 +1,11 @@
+name    'fewbytes/solr'
+version '0.1.0'
+source 'UNKNOWN'
+author 'fewbytes'
+license 'Apache License, Version 2.0'
+summary 'Install and configure Solr cloud'
+description 'UNKNOWN'
+project_page 'UNKNOWN'
+
+dependency 'puppetlabs/java'
+dependency 'puppetlabs/stdlib'
