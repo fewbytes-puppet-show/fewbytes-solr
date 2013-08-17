@@ -9,3 +9,5 @@ project_page 'UNKNOWN'
 
 dependency 'puppetlabs/java'
 dependency 'puppetlabs/stdlib'
+dependency 'fewbytes/upstart'
+dependency 'smarchive/archive'

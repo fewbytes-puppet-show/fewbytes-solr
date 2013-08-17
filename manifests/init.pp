@@ -53,7 +53,8 @@ class solr(
 	$logs_dir=$::solr::params::logs_dir,
 	$max_threads=$::solr::params::max_threads,
 	$min_threads=$::solr::params::min_threads,
-	$enable_requests_log=true
+	$enable_requests_log=true,
+	$init_style=sysv
 ) inherits solr::params {
 	include java
 	
@@ -66,11 +67,11 @@ class solr(
 	$java_opts = "$java_heap_opts -Dlog4j.configuration=file://${solr::params::conf_dir}/log4j.properties ${solr_opts} ${zk_opts}"
 	
 	user{$solr::params::user: ensure => present, system => true }
-	file{[$solr::params::base_dir,
-		$solr::params::conf_dir,
-		$solr::params::var_dir,
-		$solr::params::jetty_dir,
-		"${solr::params::base_dir}/${version}"]: 
+	file{[$base_dir,
+		$conf_dir,
+		$var_dir,
+		$jetty_dir,
+		"${base_dir}/${version}"]: 
 		ensure => directory,
 		mode => 644
 	}
@@ -132,13 +133,6 @@ class solr(
 		mode => 644,
 		notify => Service[solr]
 	}
-	
-# upstart service file
-	file{"/etc/init/solr.conf": 
-		content => template("solr/upstart.conf.erb"),
-		mode => 644,
-		notify => Service[solr]
-	}
 
 	exec{"cp -a ${solr::params::base_dir}/current/example/solr/collection1 ${solr_home}/ && chown -R ${solr::params::user} ${solr_home}/collection1": 
 		provider => shell,
@@ -148,15 +142,26 @@ class solr(
 	}
 
 # ugly hack for upstart on RHEL 6.x
-	service{solr: 
-		ensure => $activate_service,
-		enable => $enable_service,
-		hasstatus => true,
-		hasrestart => true,
-		start => "/sbin/initctl start solr",
-		stop => "/sbin/initctl stop solr",
-		restart => "/sbin/initctl restart solr",
-		status => "/sbin/initctl status solr | grep -q running", 
-		require => Class[java]
+	case $init_style {
+		upstart : {
+			upstart::service{solr:
+				ensure => $activate_service,
+				user => $user,
+				chdir => $jetty_dir,
+				exec => "java $java_opts -jar $jetty_dir/start.jar $conf_dir/jetty.xml",
+				require => Class[java]
+			}
+		}
+		sysv : {
+			file{"/etc/init.d/solr":
+				mode => 755,
+				content => template("solr/init.sh.erb")
+			} ->
+			service{solr: 
+				ensure => $activate_service,
+				enable => $enable_service,
+				require => Class[java]
+			}
+		}
 	}
 }
