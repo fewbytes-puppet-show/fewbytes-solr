@@ -91,7 +91,7 @@ class solr(
 	exec {"extract solr $version":
 		provider => shell,
 		command => "tar -xzf /tmp/solr-$version.tar.gz -C ${solr::params::base_dir}/$version --strip-components=1",
-		creates => "${solr::params::base_dir}/$version/start.jar",
+		creates => "${solr::params::base_dir}/$version/example/start.jar",
 		require => File["${solr::params::base_dir}/$version"]
 	}
 	->
@@ -137,7 +137,7 @@ class solr(
 	exec{"cp -a ${solr::params::base_dir}/current/example/solr/collection1 ${solr_home}/ && chown -R ${solr::params::user} ${solr_home}/collection1": 
 		provider => shell,
 		before => Service[solr],
-		require => Exec["extract solr $version"],
+		require => [Exec["extract solr $version"], File[$solr_home]],
 		creates => "${solr_home}/collection1/core.properties"
 	}
 
