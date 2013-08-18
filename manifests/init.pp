@@ -101,7 +101,7 @@ class solr(
 		notify => Service[solr],
 	}
 
-	file{[$solr::params::logs_dir, $solr::params::solr_home]: 
+	file{[$logs_dir, $solr_home_parent, $solr_home]: 
 		ensure => directory,
 		owner => $solr::params::user,
 		mode => 644,
