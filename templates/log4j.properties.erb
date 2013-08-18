@@ -1,5 +1,5 @@
 #  Logging level
-solr.log=<%= scope.lookupvar("solr::params::logs_dir") %>
+solr.log=<%= @log_dir %>
 log4j.rootLogger=<%= @log_level.upcase %>, file
 
 #- size rotation with log cleanup.
