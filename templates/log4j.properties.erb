@@ -1,6 +1,6 @@
 #  Logging level
 solr.log=<%= @log_dir %>
-log4j.rootLogger=<%= @log_level.upcase %>, file
+log4j.rootLogger=<%= @log_level_real.upcase %>, file
 
 #- size rotation with log cleanup.
 log4j.appender.file=org.apache.log4j.RollingFileAppender

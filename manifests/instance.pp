@@ -5,17 +5,18 @@ define solr::instance(
 	$port,
 	$zk_hosts=[],
 	$data_dir=undef,
-	$java_xmx=$::solr::params::java_xmx,
-	$java_xmn=$::solr::params::java_xmn,
-	$java_xms=$::solr::params::java_xms,
+	$java_xmx=undef,
+	$java_xmn=undef,
+	$java_xms=undef,
 	$java_extra_opts="",
-	$log_level=$::solr::params::log_level,
-	$max_threads=$::solr::params::max_threads,
-	$min_threads=$::solr::params::min_threads,
+	$log_level=undef,
+	$max_threads=undef,
+	$min_threads=undef,
 	$enable_requests_log=true,
 	$init_style=sysv
 	) {
 
+	include solr::params
 	include java
 	include solr::install
 	
@@ -25,18 +26,22 @@ define solr::instance(
 		$zk_hosts_str = join($zk_hosts, ",")
 		$zk_opts = "-DzkHost=${zk_hosts_str}"
 	}
-	if $data_dir == undef {
-		$data_dir_real = "${instance_dir}/data"
-	} else {
-		$data_dir_real = $data_dir
-	}
+
+	# set defaults from solr::params
+	$data_dir_real = pick($data_dir, "${instance_dir}/data")
+	$java_xmx_real = pick($java_xmx, $solr::params::java_xmx)
+	$java_xmn_real = pick($java_xmn, $solr::params::java_xmn)
+	$java_xms_real = pick($java_xms, $solr::params::java_xms)
+	$log_level_real = pick($log_level, $solr::params::log_level)
+	$max_threads_real = pick($max_threads, $solr::params::max_threads)
+	$min_threads_real = pick($min_threads, $::solr::params::min_threads)
 
 	$log_dir = "${solr::params::logs_dir}/${instance_name}"
 	$solr_home = "${instance_dir}/home"
 	$jetty_dir = "${instance_dir}/jetty"
 	$svc_name = "solr-${instance_name}"
 	$conf_dir = "${solr::params::conf_dir}/${instance_name}"
-	$java_heap_opts = "-Xmx${java_xmx} -Xmn${java_xmn} -Xms${java_xms} ${java_extra_opts}"
+	$java_heap_opts = "-Xmx${java_xmx_real} -Xmn${java_xmn_real} -Xms${java_xms_real} ${java_extra_opts}"
 	$solr_opts = "-Dsolr.solr.home=${solr_home} -Dsolr.data.dir=${data_dir_real}"
 	$java_opts = "$java_heap_opts -Djetty.port=${port} -Dlog4j.configuration=file://${conf_dir}/log4j.properties ${solr_opts} ${zk_opts}"
 
