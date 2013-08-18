@@ -6,7 +6,7 @@ class solr::params {
 	$base_dir = "/opt/solr"
 	$conf_dir = "/etc/solr"
 	$jetty_dir = "${var_dir}/jetty"
-	$solr_home="${var_dir}/home"
+	$solr_home="${var_dir}/solr/home"
 	$data_dir = "${solr_home}/data"
 	$java_xmx="512m"
 	$java_xmn="256m"

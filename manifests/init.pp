@@ -109,13 +109,23 @@ class solr(
 		require => User[$solr::params::user]
 	}
 
-	file{"${solr::params::solr_home}/solr.xml":
+	file{"${solr_home}/solr.xml":
 		ensure => link,
-		target => "${solr::params::conf_dir}/solr.xml",
+		target => "${conf_dir}/solr.xml",
 		notify => Service[solr]
 	}
+	file{"${var_dir}/contrib": 
+		ensure => link,
+		target => "${base_dir}/current/contrib",
+		before => Service[solr]
+	}
+	file{"${var_dir}/dist": 
+		ensure => link,
+		target => "${base_dir}/current/dist",
+		before => Service[solr]
+	}
 
-	class{solr::jetty_home: before => Service[solr], require => File["${solr::params::base_dir}/current"]}
+	class{solr::jetty_home: before => Service[solr], require => File["${base_dir}/current"]}
 
 	file{"${solr::params::conf_dir}/solr.xml": 
 		content => template("solr/solr.xml.erb"),
