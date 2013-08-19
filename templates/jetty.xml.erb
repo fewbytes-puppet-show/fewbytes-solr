@@ -130,7 +130,7 @@
             <Set name="requestLog">
               <New id="RequestLogImpl" class="org.eclipse.jetty.server.NCSARequestLog">
                 <Set name="filename">
-                   <%= @logs_dir %>/request.yyyy_mm_dd.log
+                   <%= @log_dir %>/request.yyyy_mm_dd.log
                 </Set>
                 <Set name="filenameDateFormat">yyyy_MM_dd</Set>
                 <Set name="retainDays">90</Set>
