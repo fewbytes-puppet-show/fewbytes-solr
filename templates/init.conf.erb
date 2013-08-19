@@ -1,0 +1,5 @@
+[main]
+command: <%= @solr_command %>
+user: <%= scope.lookupvar("solr::params::user") %>
+pidfile: /var/run/<%= @svc_name %>.pid
+chdir: <%= @jetty_dir %>

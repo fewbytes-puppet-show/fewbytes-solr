@@ -90,6 +90,8 @@ define solr::instance(
 		creates => "${solr_home}/collection1/core.properties"
 	}
 
+	$solr_command = "java $java_opts -jar $jetty_dir/start.jar $conf_dir/jetty.xml"
+
 # ugly hack for upstart on RHEL 6.x
 	case $init_style {
 		upstart : {
@@ -97,14 +99,19 @@ define solr::instance(
 				ensure => $activate_service,
 				user => $user,
 				chdir => $jetty_dir,
-				exec => "java $java_opts -jar $jetty_dir/start.jar $conf_dir/jetty.xml",
+				exec => $solr_command,
 				require => [Class[java], Class[solr::install]]
 			}
 		}
 		sysv : {
 			file{"/etc/init.d/${svc_name}":
+				source => "puppet:///modules/solr/solr-init.py",
 				mode => 755,
-				content => template("solr/init.sh.erb")
+				before => Service[$svc_name]
+			}
+			file{"${conf_dir}/init.conf":
+				mode => 755,
+				content => template("solr/init.conf.erb")
 			} ->
 			service{$svc_name: 
 				ensure => $activate_service,
