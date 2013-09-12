@@ -14,7 +14,7 @@ class solr::install(
 	
 	if $tarball_url =~ /^puppet:\/\// {
 		file {"/tmp/solr-$version.tar.gz":
-			source => $solr::params::tarball_url,
+			source => $tarball_url,
 			before => Exec["extract solr $version"]
 		}
 	} else {
