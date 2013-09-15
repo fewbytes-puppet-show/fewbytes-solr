@@ -5,7 +5,15 @@ FORGE
       puppetlabs/stdlib (>= 0.1.6)
     puppetlabs/stdlib (4.1.0)
 
+GIT
+  remote: https://github.com/gini/puppet-archive.git
+  ref: master
+  sha: 5956674698b1dd98175ec5dbba5f2a816f08e422
+  specs:
+    jini/archive (0.2.0)
+
 DEPENDENCIES
+  jini/archive (>= 0)
   puppetlabs/java (>= 0)
   puppetlabs/stdlib (>= 0)
 
