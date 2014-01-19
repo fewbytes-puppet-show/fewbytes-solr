@@ -97,7 +97,7 @@ define solr::instance(
 		upstart : {
 			upstart::service{$svc_name:
 				ensure => $activate_service,
-				user => $user,
+				user => $solr::params::user,
 				chdir => $jetty_dir,
 				exec => $solr_command,
 				require => [Class[java], Class[solr::install]]
