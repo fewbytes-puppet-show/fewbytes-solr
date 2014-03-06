@@ -52,10 +52,11 @@ define solr::instance(
 
 	file{[$log_dir, $solr_home, $data_dir_real]: 
 		ensure => directory,
-		owner => $solr::params::user,
+		owner => $solr::install::user,
+		group => $solr::install::group,
 		mode => 644,
 		before => Service[$svc_name],
-		require => User[$solr::params::user]
+		require => [User[$solr::install::user], Group[$solr::install::group]]
 	}
 
 	file{"${solr_home}/solr.xml":
@@ -97,7 +98,7 @@ define solr::instance(
 		upstart : {
 			upstart::service{$svc_name:
 				ensure => $activate_service,
-				user => $solr::params::user,
+				user => $solr::install::user,
 				chdir => $jetty_dir,
 				exec => $solr_command,
 				require => [Class[java], Class[solr::install]]

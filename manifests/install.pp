@@ -1,9 +1,13 @@
 class solr::install(
-	$version="4.4.0",
+	$version="4.7.0",
 	$tarball_url=$::solr::params::tarball_url,
 	$logs_dir=$::solr::params::logs_dir,
+	$user=$::solr::params::user,
+	$group=$::solr::params::group,
 ) inherits solr::params {
-	user{$solr::params::user: ensure => present, system => true }
+	group{$group: ensure => present, system => true}
+	->
+	user{$user: ensure => present, system => true, gid => $group }
 	file{[$base_dir,
 		$conf_dir,
 		$var_dir,
@@ -38,9 +42,10 @@ class solr::install(
 
 	file{$logs_dir: 
 		ensure => directory,
-		owner => $solr::params::user,
+		owner => $user,
+		group => $group,
 		mode => 644,
-		require => User[$solr::params::user]
+		require => [User[$user], Group[$group]]
 	}
 	file{"${var_dir}/contrib": 
 		ensure => link,

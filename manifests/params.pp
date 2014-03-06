@@ -15,5 +15,5 @@ class solr::params {
 	$java_extra_opts=""
 	$max_threads=1000
 	$min_threads=100
-	$tarball_url="http://mirror.host4site.co.il/apache/lucene/solr/4.4.0/solr-4.4.0.tgz"
+	$tarball_url="http://www.us.apache.org/dist/lucene/solr/4.7.0/solr-4.7.0.tgz"
 }

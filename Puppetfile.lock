@@ -6,13 +6,27 @@ FORGE
     puppetlabs/stdlib (4.1.0)
 
 GIT
+  remote: https://github.com/fewbytes-puppet-show/fewbytes-upstart.git
+  ref: master
+  sha: 026556eee90d310a9b2faca9fd5d8509b3a63a6c
+  specs:
+    fewbytes/upstart (0.1.0)
+
+GIT
   remote: https://github.com/gini/puppet-archive.git
   ref: master
   sha: 5956674698b1dd98175ec5dbba5f2a816f08e422
   specs:
     jini/archive (0.2.0)
 
+PATH
+  remote: .
+  specs:
+    fewbytes/solr (0.0.1)
+
 DEPENDENCIES
+  fewbytes/solr (>= 0)
+  fewbytes/upstart (>= 0)
   jini/archive (>= 0)
   puppetlabs/java (>= 0)
   puppetlabs/stdlib (>= 0)
